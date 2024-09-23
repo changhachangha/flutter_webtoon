@@ -1,0 +1,77 @@
+import 'package:flutter/material.dart';
+
+class ResponsiveDropdown extends StatefulWidget {
+  final List<String> options;
+  final String? selectedOption;
+  final IconData? icon;
+  final Function(String) onOptionSelected;
+
+  ResponsiveDropdown({
+    required this.options,
+    this.selectedOption,
+    this.icon,
+    required this.onOptionSelected,
+  });
+
+  @override
+  _ResponsiveDropdownState createState() => _ResponsiveDropdownState();
+}
+
+class _ResponsiveDropdownState extends State<ResponsiveDropdown> {
+  bool _isExpanded = false;
+
+  void _toggleExpansion() {
+    setState(() {
+      _isExpanded = !_isExpanded;
+    });
+  }
+
+  void _selectOption(String option) {
+    widget.onOptionSelected(option);
+    _toggleExpansion();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _toggleExpansion,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey.shade300),
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                if (widget.icon != null)
+                  Icon(
+                    widget.icon,
+                    size: 20.0,
+                    color: Colors.white,
+                  ),
+                SizedBox(width: 8.0),
+                Text(
+                  widget.selectedOption ?? '선택',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                  ),
+                ),
+              ],
+            ),
+            Icon(
+              _isExpanded
+                  ? Icons.arrow_drop_up
+                  : Icons.arrow_drop_down,
+              size: 24.0,
+              color: Colors.grey.shade700,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
